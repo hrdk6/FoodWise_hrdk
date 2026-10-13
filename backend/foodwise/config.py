@@ -54,6 +54,9 @@ class Settings(BaseSettings):
     smtp_from: str = "FoodWise <alerts@foodwise.local>"
 
     training_time_budget_s: int = 240
+    # Folder holding the public Genpact food demand CSVs (train.csv, meal_info.csv,
+    # fulfilment_center_info.csv) for the real-data benchmark. Relative to where the backend runs.
+    genpact_dir: Path = Path("../data/genpact")
     log_level: str = "INFO"
 
     @property

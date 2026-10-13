@@ -1534,6 +1534,57 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/benchmark/genpact": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Genpact */
+        get: operations["get_genpact_api_v1_benchmark_genpact_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/benchmark/genpact/run": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Run Genpact */
+        post: operations["run_genpact_api_v1_benchmark_genpact_run_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/benchmark/genpact/clean.csv": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Clean Csv */
+        get: operations["clean_csv_api_v1_benchmark_genpact_clean_csv_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/telemetry/vitals": {
         parameters: {
             query?: never;
@@ -2785,6 +2836,19 @@ export interface components {
              * Format: date
              */
             date: string;
+        };
+        /** GenpactOut */
+        GenpactOut: {
+            /** Status */
+            status: string;
+            /** Data Dir */
+            data_dir: string;
+            /** Missing Files */
+            missing_files: string[];
+            /** Report */
+            report: {
+                [key: string]: unknown;
+            } | null;
         };
         /** GivenPlace */
         GivenPlace: {
@@ -7680,6 +7744,66 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_genpact_api_v1_benchmark_genpact_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GenpactOut"];
+                };
+            };
+        };
+    };
+    run_genpact_api_v1_benchmark_genpact_run_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["JobRef"];
+                };
+            };
+        };
+    };
+    clean_csv_api_v1_benchmark_genpact_clean_csv_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
                 };
             };
         };

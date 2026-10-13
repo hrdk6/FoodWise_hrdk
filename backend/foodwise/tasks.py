@@ -60,6 +60,17 @@ def train_job(job: Job) -> dict:
     return result
 
 
+@handler("genpact_benchmark")
+def genpact_job(job: Job) -> dict:
+    from foodwise.benchmark import genpact
+    from foodwise.config import get_settings
+
+    report, df = genpact.run(get_settings().genpact_dir,
+                             progress=lambda label, frac: jobs.set_progress(job.id, {"label": label, "fraction": frac}))
+    genpact.save(report, df)
+    return {"winner": report["winner"], "rows_clean": report["rows_clean"]}
+
+
 @handler("generate_forecasts")
 def forecast_job(job: Job) -> dict:
     with tenant_session(job.tenant_id) as db:

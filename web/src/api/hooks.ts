@@ -217,6 +217,11 @@ export function useJob(id: string | null) {
   });
 }
 
+export const useGenpact = () =>
+  useQuery({ queryKey: ["benchmark", "genpact"], queryFn: () => unwrap(api.GET("/api/v1/benchmark/genpact")) });
+
+export const useRunGenpact = () => useMutation({ mutationFn: () => unwrap(api.POST("/api/v1/benchmark/genpact/run")) });
+
 export function usePromote() {
   const inv = useInvalidate();
   return useMutation({

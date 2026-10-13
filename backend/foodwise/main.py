@@ -17,6 +17,7 @@ from sqlalchemy import select
 from foodwise import tasks  # noqa: F401  (registers job handlers for inline mode)
 from foodwise.api import (
     auth,
+    benchmark,
     catalog,
     dataset,
     feedback,
@@ -142,7 +143,7 @@ def create_app() -> FastAPI:
 
     api = API_PREFIX
     for module in (auth, tenant, catalog, dataset, logs, imports, forecasts, models, feedback, incidents, places, impact,
-                   live, webhooks, ops):
+                   live, webhooks, ops, benchmark):
         app.include_router(module.router, prefix=api)
     app.include_router(ops.telemetry_router, prefix=api)
     app.include_router(public.router, prefix=api)

@@ -106,13 +106,17 @@ The whole stack in containers: `docker compose up --build`, then http://localhos
 
 `foodwise seed` builds Sahyadri Institute of Technology (fictional, sign in as `team@sahyadri.example`) as a **digital twin**: true demand comes from a simulated semester calendar, Pune weather, exams, fests and dish quality. Eight months are planned by hand, then FoodWise trains a champion and the simulated kitchen cooks FoodWise's plans for three weeks against that true demand; a weekly retrain produces a challenger that must win a shadow week. Every accuracy, waste and model figure in the demo is an output of the system, not a number written into the database. A daily `demo_tick` job keeps the twin running, so the demo stays current. A second college, Riverside (`team@riverside.example`), signed up ten days ago and shows the cold-start tier. The admin account is `admin@foodwise.example`.
 
+### Real-data benchmark
+
+The simulation proves the models recover effects planted in it; it cannot show how they cope with real, messy data. **Learn > Real-data benchmark** runs the same method on the public Genpact food demand dataset (weekly orders of 51 meals at 77 centres of a meal-delivery company, Analytics Vidhya hackathon, on Kaggle as "Food Demand Forecasting"). It cleans the data in seven reported steps (inspect, missing values, duplicates, invalid values, outliers, features, validation with a leakage test), then backtests baselines, ridge, extra trees and gradient boosting on week-ordered folds. Put the CSVs in `data/genpact/` (see the README there) and press Run, or run `uv run foodwise benchmark` from `backend/`. The data is weekly delivery-centre orders, not a canteen, so it tests the method, not the canteen-specific features.
+
 ## Tests
 
 ```bash
 cd backend && uv run pytest
 ```
 
-129 tests: business rules (newsvendor, safety gate, OpenStreetMap place classification, opening hours and ranking, dish-picture matching, data quality, text analysis), ML guarantees (a leakage test that perturbs future rows, time-ordered folds, conformal coverage, a golden-dataset test that learned models beat baselines), and database flows (cross-tenant 404s on every endpoint and at the RLS level, organisation and admin sign-in separation, password change signing out other devices, refresh-token reuse detection, lockout, the full rescue flow with two people recording donations at the same moment, place search when OpenStreetMap is down, picture upload metadata stripping, the Web Vitals beacon, imports, the job queue). Database tests use the `foodwise_test` database from `docker compose up -d db`; OpenStreetMap and Wikimedia are faked.
+137 tests: business rules (newsvendor, safety gate, OpenStreetMap place classification, opening hours and ranking, dish-picture matching, data quality, text analysis), ML guarantees (a leakage test that perturbs future rows, time-ordered folds, conformal coverage, a golden-dataset test that learned models beat baselines), and database flows (cross-tenant 404s on every endpoint and at the RLS level, organisation and admin sign-in separation, password change signing out other devices, refresh-token reuse detection, lockout, the full rescue flow with two people recording donations at the same moment, place search when OpenStreetMap is down, picture upload metadata stripping, the Web Vitals beacon, imports, the job queue). Database tests use the `foodwise_test` database from `docker compose up -d db`; OpenStreetMap and Wikimedia are faked.
 
 ```bash
 cd web && npx tsc -b
@@ -129,6 +133,7 @@ backend/foodwise/
   ml/         features, zoo, conformal, selection, training, serving, explain, monitoring, registry
   services/   rescue engine, places (Overpass), dish pictures (Wikimedia), webhooks, weather
   sim/        the simulated college, seed, daily demo tick
+  benchmark/  real-data benchmark on the public Genpact food demand dataset
   tasks.py, worker.py, main.py, cli.py
 backend/migrations/   Alembic (schema, RLS policies, append-only audit trigger)
 backend/tests/
