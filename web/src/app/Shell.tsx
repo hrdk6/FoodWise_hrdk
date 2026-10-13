@@ -13,6 +13,7 @@ import {
   Settings,
   MapPin,
   Sparkles,
+  Table2,
   UtensilsCrossed,
   WifiOff,
   X,
@@ -52,6 +53,7 @@ const GROUPS: Group[] = [
     items: [
       { to: "/feedback", label: "Student feedback", icon: <MessageSquareText />, perm: "feedback:read" },
       { to: "/models", label: "Forecast models", icon: <Sparkles />, perm: "models:read" },
+      { to: "/dataset", label: "Training data", icon: <Table2 />, perm: "logs:read" },
       { to: "/impact", label: "Impact", icon: <BarChart3 />, perm: "impact:read" },
       { to: "/whatif", label: "What if", icon: <FlaskConical />, perm: "forecast:read" },
     ],

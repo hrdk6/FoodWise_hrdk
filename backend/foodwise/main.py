@@ -18,6 +18,7 @@ from foodwise import tasks  # noqa: F401  (registers job handlers for inline mod
 from foodwise.api import (
     auth,
     catalog,
+    dataset,
     feedback,
     forecasts,
     health,
@@ -140,7 +141,7 @@ def create_app() -> FastAPI:
         return response
 
     api = API_PREFIX
-    for module in (auth, tenant, catalog, logs, imports, forecasts, models, feedback, incidents, places, impact,
+    for module in (auth, tenant, catalog, dataset, logs, imports, forecasts, models, feedback, incidents, places, impact,
                    live, webhooks, ops):
         app.include_router(module.router, prefix=api)
     app.include_router(ops.telemetry_router, prefix=api)

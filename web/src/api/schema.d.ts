@@ -422,6 +422,57 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/dataset/summary": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Summary */
+        get: operations["summary_api_v1_dataset_summary_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/dataset/rows": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Rows */
+        get: operations["rows_api_v1_dataset_rows_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/dataset/export": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Export */
+        get: operations["export_api_v1_dataset_export_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/logs/sheet": {
         parameters: {
             query?: never;
@@ -2010,6 +2061,15 @@ export interface components {
             /** Disposal */
             disposal?: ("compost" | "animal_feed" | "biogas" | "bin") | null;
         };
+        /** Column */
+        Column: {
+            /** Key */
+            key: string;
+            /** Label */
+            label: string;
+            /** Numeric */
+            numeric: boolean;
+        };
         /** Comment */
         Comment: {
             /**
@@ -2097,6 +2157,44 @@ export interface components {
             longest_query_s: number | null;
             /** Tables */
             tables: components["schemas"]["TableRow"][];
+        };
+        /** DatasetPage */
+        DatasetPage: {
+            /** Table */
+            table: string;
+            /** Columns */
+            columns: components["schemas"]["Column"][];
+            /** Rows */
+            rows: (string | number | boolean | null)[][];
+            /** Total */
+            total: number;
+            /** Page */
+            page: number;
+            /** Page Size */
+            page_size: number;
+        };
+        /** DatasetSummary */
+        DatasetSummary: {
+            /** Canteen */
+            canteen: string;
+            /** Kind */
+            kind: string;
+            /** Days */
+            days: number;
+            /** Dishes */
+            dishes: number;
+            /** Meals */
+            meals: string[];
+            /** Tables */
+            tables: components["schemas"]["TableInfo"][];
+            /** Feature Count */
+            feature_count: number;
+            /** Feature Groups */
+            feature_groups: components["schemas"]["FeatureGroup"][];
+            /** Target */
+            target: string;
+            /** Note */
+            note: string;
         };
         /** DayContext */
         DayContext: {
@@ -2586,6 +2684,13 @@ export interface components {
             account: string;
             /** Ip */
             ip: string | null;
+        };
+        /** FeatureGroup */
+        FeatureGroup: {
+            /** Group */
+            group: string;
+            /** Columns */
+            columns: string[];
         };
         /** FeedbackIn */
         FeedbackIn: {
@@ -4057,6 +4162,21 @@ export interface components {
             /** Message */
             message: string;
         };
+        /** TableInfo */
+        TableInfo: {
+            /** Key */
+            key: string;
+            /** Label */
+            label: string;
+            /** Description */
+            description: string;
+            /** Rows */
+            rows: number;
+            /** First Day */
+            first_day: string | null;
+            /** Last Day */
+            last_day: string | null;
+        };
         /** TableRow */
         TableRow: {
             /** Table */
@@ -5487,6 +5607,111 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["WeatherOut"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    summary_api_v1_dataset_summary_get: {
+        parameters: {
+            query: {
+                canteen_id: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DatasetSummary"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    rows_api_v1_dataset_rows_get: {
+        parameters: {
+            query: {
+                canteen_id: string;
+                table: string;
+                page?: number;
+                page_size?: number;
+                start?: string | null;
+                end?: string | null;
+                meal?: string | null;
+                q?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DatasetPage"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    export_api_v1_dataset_export_get: {
+        parameters: {
+            query: {
+                canteen_id: string;
+                table: string;
+                start?: string | null;
+                end?: string | null;
+                meal?: string | null;
+                q?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
                 };
             };
             /** @description Validation Error */

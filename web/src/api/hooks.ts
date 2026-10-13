@@ -21,6 +21,31 @@ export function usePatchTenant() {
   });
 }
 
+// ----- dataset browser (every table the models learn from)
+
+export const useDatasetSummary = (canteenId: string | undefined) =>
+  useQuery({
+    enabled: !!canteenId,
+    queryKey: ["dataset", "summary", canteenId],
+    queryFn: () => unwrap(api.GET("/api/v1/dataset/summary", { params: { query: { canteen_id: canteenId! } } })),
+    staleTime: 60_000,
+  });
+
+export type DatasetQuery = { canteen_id: string; table: string; page: number; page_size: number; start?: string; end?: string; meal?: string; q?: string };
+
+export const useDatasetRows = (q: DatasetQuery | null) =>
+  useQuery({
+    enabled: !!q?.canteen_id,
+    queryKey: ["dataset", "rows", q],
+    queryFn: () =>
+      unwrap(
+        api.GET("/api/v1/dataset/rows", {
+          params: { query: { ...q!, start: q!.start || null, end: q!.end || null, meal: q!.meal || null, q: q!.q || null } },
+        }),
+      ),
+    placeholderData: (prev) => prev,
+  });
+
 export const useReadiness = () =>
   useQuery({ queryKey: ["readiness"], queryFn: () => unwrap(api.GET("/api/v1/tenant/readiness")) });
 
