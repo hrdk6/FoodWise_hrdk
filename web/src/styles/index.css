@@ -1,0 +1,161 @@
+@import "tailwindcss";
+@import "@fontsource-variable/anek-latin/wdth.css";
+@import "@fontsource-variable/anek-devanagari/wdth.css";
+
+/*
+  FoodWise design tokens: steel thali and turmeric.
+  Steel and plate are the surfaces; register ink is the text; haldi marks "cook this much" and the
+  main action; curry leaf means approved or rescued; chilli is reserved for real urgency.
+  One type family (Anek, by Ek Type) covers Latin and Devanagari; its width axis does the talking:
+  quantities wide and heavy, dense tables semi-condensed.
+*/
+@theme {
+  --font-sans: "Anek Latin Variable", "Anek Devanagari Variable", ui-sans-serif, system-ui, sans-serif;
+
+  --color-steel: #edf0ee;
+  --color-steel-2: #e2e7e4;
+  --color-plate: #f9fbfa;
+  --color-rim: #cbd3d0;
+  --color-rim-strong: #a3b0ac;
+  --color-ink: #1c2a4a;
+  --color-ink-2: #3a4763;
+  --color-muted: #5a6865;
+  --color-haldi: #e6a21a;
+  --color-haldi-soft: #f7e6bd;
+  --color-haldi-deep: #8f6207;
+  --color-leaf: #2f6e4a;
+  --color-leaf-soft: #d9eadf;
+  --color-chilli: #b83a2b;
+  --color-chilli-soft: #f5dcd7;
+  --color-rain: #4f6f8f;
+
+  --text-xs: 0.75rem;
+  --text-sm: 0.84375rem;
+  --text-base: 0.9375rem;
+  --text-lg: 1.171875rem;
+  --text-xl: 1.46484375rem;
+  --text-2xl: 1.8310546875rem;
+  --text-3xl: 2.2888183594rem;
+  --text-4xl: 2.8610229492rem;
+
+  --radius-rim: 10px;
+  --radius-pill: 999px;
+
+  --ease-pour: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+@layer base {
+  html {
+    color-scheme: light;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    background: var(--color-steel);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    line-height: 1.5;
+    font-variation-settings: normal;
+    font-feature-settings: "kern" 1;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3 {
+    font-stretch: 112%;
+    letter-spacing: -0.005em;
+    line-height: 1.15;
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
+  }
+  :focus-visible {
+    outline: 2.5px solid var(--color-haldi);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+  ::selection {
+    background: var(--color-haldi-soft);
+  }
+  [lang="hi"] {
+    font-family: "Anek Devanagari Variable", var(--font-sans);
+  }
+}
+
+@layer components {
+  /* A container with a thali rim: hairline outer edge and a soft inner highlight, no drop shadow. */
+  .rim {
+    background: var(--color-plate);
+    border: 1px solid var(--color-rim);
+    border-radius: var(--radius-rim);
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.9);
+  }
+  .rim-sunken {
+    background: var(--color-steel-2);
+    border: 1px solid transparent;
+    border-radius: var(--radius-rim);
+  }
+  .qty {
+    font-stretch: 122%;
+    font-weight: 720;
+    font-variant-numeric: tabular-nums lining-nums;
+    letter-spacing: -0.01em;
+    line-height: 1;
+  }
+  .num {
+    font-variant-numeric: tabular-nums lining-nums;
+  }
+  .condensed {
+    font-stretch: 86%;
+  }
+  .label {
+    font-size: var(--text-sm);
+    color: var(--color-muted);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* The one orchestrated moment: demand shapes pour in when a plan first loads. */
+@keyframes pour {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+@keyframes ladle {
+  from {
+    transform: translateY(-6px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+.animate-pour {
+  animation: pour 640ms var(--ease-pour) both;
+}
+.animate-ladle {
+  animation: ladle 360ms var(--ease-pour) both;
+}
+
+/* Leaflet */
+.leaflet-container {
+  font-family: var(--font-sans);
+  background: var(--color-steel-2);
+}
+.leaflet-popup-content-wrapper,
+.leaflet-popup-tip {
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgb(28 42 74 / 0.18);
+}

@@ -1,0 +1,24 @@
+# dependencies and build output
+node_modules/
+.venv/
+dist/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+*.tsbuildinfo
+
+# local data: database files, uploaded and fetched pictures, model artifacts, test storage
+backend/var/
+backend/tests/.storage/
+
+# secrets and local config
+.env
+.env.*
+!.env.example
+
+# tool scratch
+.claude/
+.playwright-mcp/
+.DS_Store
+Thumbs.db

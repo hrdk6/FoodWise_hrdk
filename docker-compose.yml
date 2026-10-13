@@ -1,0 +1,70 @@
+# Local development and single-host deployment.
+#   docker compose up -d db        # just the database, run api/worker/web on the host
+#   docker compose up --build      # the whole stack on http://localhost:8080
+name: foodwise
+
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "${FOODWISE_DB_PORT:-5433}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./infra/postgres/init.sql:/docker-entrypoint-initdb.d/00-init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U foodwise -d foodwise"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  api:
+    build:
+      context: .
+      dockerfile: infra/backend.Dockerfile
+    command: ["sh", "-c", "foodwise migrate && foodwise seed --if-empty && foodwise api --host 0.0.0.0 --port 8000"]
+    environment: &backend-env
+      FOODWISE_ENV: ${FOODWISE_ENV:-development}
+      FOODWISE_DATABASE_URL: postgresql+psycopg://foodwise:foodwise@db:5432/foodwise
+      FOODWISE_JWT_SECRET: ${FOODWISE_JWT_SECRET:-dev-only-jwt-secret-change-me-0123456789}
+      FOODWISE_LINK_SECRET: ${FOODWISE_LINK_SECRET:-dev-only-link-secret-change-me-0123456789}
+      FOODWISE_PUBLIC_BASE_URL: ${FOODWISE_PUBLIC_BASE_URL:-http://localhost:8080}
+      FOODWISE_CORS_ORIGINS: ${FOODWISE_CORS_ORIGINS:-["http://localhost:8080"]}
+      FOODWISE_STORAGE_DIR: /data/storage
+    volumes:
+      - storage:/data/storage
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health/ready')"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 120s
+
+  worker:
+    build:
+      context: .
+      dockerfile: infra/backend.Dockerfile
+    command: ["foodwise", "worker"]
+    environment: *backend-env
+    volumes:
+      - storage:/data/storage
+    depends_on:
+      api:
+        condition: service_healthy
+
+  web:
+    build:
+      context: .
+      dockerfile: infra/web.Dockerfile
+    ports:
+      - "8080:80"
+    depends_on:
+      - api
+
+volumes:
+  pgdata:
+  storage:

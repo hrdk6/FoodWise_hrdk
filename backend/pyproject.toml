@@ -1,0 +1,61 @@
+[project]
+name = "foodwise"
+version = "0.1.0"
+description = "FoodWise: demand forecasting, student feedback and surplus rescue for college canteens"
+requires-python = ">=3.12"
+dependencies = [
+  "fastapi>=0.115",
+  "uvicorn[standard]>=0.32",
+  "sqlalchemy>=2.0.36",
+  "psycopg[binary]>=3.2",
+  "alembic>=1.14",
+  "pydantic>=2.9",
+  "pydantic-settings>=2.6",
+  "email-validator>=2.2",
+  "argon2-cffi>=23.1",
+  "pyjwt>=2.10",
+  "python-multipart>=0.0.18",
+  "numpy>=2.1",
+  "pandas>=2.2",
+  "scikit-learn>=1.6",
+  "scipy>=1.14",
+  "lightgbm>=4.5",
+  "joblib>=1.4",
+  "httpx>=0.28",
+  "fpdf2>=2.8",
+  "prometheus-client>=0.21",
+  "openpyxl>=3.1.5",
+  "pillow>=11",
+]
+
+[project.scripts]
+foodwise = "foodwise.cli:main"
+
+[dependency-groups]
+dev = [
+  "pytest>=8.3",
+  "ruff>=0.8",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["foodwise"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+  "db: tests that need PostgreSQL (docker compose up -d db)",
+  "slow: full model-zoo backtests on the golden dataset (about a minute)",
+]
+filterwarnings = ["ignore::DeprecationWarning"]
+
+[tool.ruff]
+line-length = 110
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM"]
+ignore = ["E501", "B008", "UP046"]
