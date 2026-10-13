@@ -4960,82 +4960,6 @@
         }
       }
     },
-    "/api/v1/benchmark/genpact": {
-      "get": {
-        "tags": [
-          "benchmark"
-        ],
-        "summary": "Get Genpact",
-        "operationId": "get_genpact_api_v1_benchmark_genpact_get",
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/GenpactOut"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "HTTPBearer": []
-          }
-        ]
-      }
-    },
-    "/api/v1/benchmark/genpact/run": {
-      "post": {
-        "tags": [
-          "benchmark"
-        ],
-        "summary": "Run Genpact",
-        "operationId": "run_genpact_api_v1_benchmark_genpact_run_post",
-        "responses": {
-          "202": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/JobRef"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "HTTPBearer": []
-          }
-        ]
-      }
-    },
-    "/api/v1/benchmark/genpact/clean.csv": {
-      "get": {
-        "tags": [
-          "benchmark"
-        ],
-        "summary": "Clean Csv",
-        "operationId": "clean_csv_api_v1_benchmark_genpact_clean_csv_get",
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "HTTPBearer": []
-          }
-        ]
-      }
-    },
     "/api/v1/telemetry/vitals": {
       "post": {
         "tags": [
@@ -8797,45 +8721,6 @@
           "date"
         ],
         "title": "GenerateIn"
-      },
-      "GenpactOut": {
-        "properties": {
-          "status": {
-            "type": "string",
-            "title": "Status"
-          },
-          "data_dir": {
-            "type": "string",
-            "title": "Data Dir"
-          },
-          "missing_files": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array",
-            "title": "Missing Files"
-          },
-          "report": {
-            "anyOf": [
-              {
-                "additionalProperties": true,
-                "type": "object"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Report"
-          }
-        },
-        "type": "object",
-        "required": [
-          "status",
-          "data_dir",
-          "missing_files",
-          "report"
-        ],
-        "title": "GenpactOut"
       },
       "GivenPlace": {
         "properties": {

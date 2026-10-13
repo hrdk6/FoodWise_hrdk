@@ -32,10 +32,8 @@ services:
       FOODWISE_PUBLIC_BASE_URL: ${FOODWISE_PUBLIC_BASE_URL:-http://localhost:8080}
       FOODWISE_CORS_ORIGINS: ${FOODWISE_CORS_ORIGINS:-["http://localhost:8080"]}
       FOODWISE_STORAGE_DIR: /data/storage
-      FOODWISE_GENPACT_DIR: /data/genpact
     volumes:
       - storage:/data/storage
-      - ./data/genpact:/data/genpact:ro
     depends_on:
       db:
         condition: service_healthy
@@ -54,7 +52,6 @@ services:
     environment: *backend-env
     volumes:
       - storage:/data/storage
-      - ./data/genpact:/data/genpact:ro
     depends_on:
       api:
         condition: service_healthy

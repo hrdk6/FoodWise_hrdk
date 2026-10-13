@@ -1,4 +1,4 @@
-"""`foodwise` command line: api, worker, migrate, seed, train, benchmark, openapi."""
+"""`foodwise` command line: api, worker, migrate, seed, train, openapi."""
 
 from __future__ import annotations
 
@@ -39,8 +39,6 @@ def main(argv: list[str] | None = None) -> None:
     sub.add_parser("demo-tick", help="continue the demo college up to today")
     train = sub.add_parser("train", help="train models for every canteen now")
     train.add_argument("--tenant", help="tenant slug (default: all)")
-    bench = sub.add_parser("benchmark", help="clean the Genpact food demand dataset and backtest the models on it")
-    bench.add_argument("--data-dir", help="folder with train.csv, meal_info.csv and fulfilment_center_info.csv")
     out = sub.add_parser("openapi", help="write the OpenAPI document")
     out.add_argument("path", nargs="?", default="-")
     args = parser.parse_args(argv)
@@ -94,18 +92,6 @@ def main(argv: list[str] | None = None) -> None:
         for tenant_id, canteen_id, name in targets:
             result = train_canteen(tenant_id, canteen_id, trigger="cli")
             log.info("%s: %s", name, json.dumps(result, default=str))
-    elif args.cmd == "benchmark":
-        from foodwise.benchmark import genpact
-
-        data_dir = Path(args.data_dir) if args.data_dir else settings.genpact_dir
-        try:
-            report, df = genpact.run(data_dir, progress=lambda label, frac: log.info("%3.0f%% %s", frac * 100, label))
-        except genpact.BenchmarkError as exc:
-            sys.exit(str(exc))
-        genpact.save(report, df)
-        for r in report["leaderboard"]:
-            log.info("%-36s WAPE %5.1f%%  RMSLE %.3f  %s", r["label"], r["wape"] * 100, r["rmsle"], r["status"])
-        log.info("report saved; open Learn > Real-data benchmark in the app")
     elif args.cmd == "openapi":
         from foodwise.main import create_app
 

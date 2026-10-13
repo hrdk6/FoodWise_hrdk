@@ -11,9 +11,6 @@ __pycache__/
 # local data: database files, uploaded and fetched pictures, model artifacts, test storage
 backend/var/
 backend/tests/.storage/
-# public datasets are downloaded, not committed (see data/genpact/README.md)
-data/genpact/*.csv
-data/genpact/*.zip
 
 # secrets and local config
 .env

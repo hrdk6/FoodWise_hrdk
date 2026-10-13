@@ -20,7 +20,6 @@ const Feedback = lazy(() => import("@/pages/Feedback"));
 const Models = lazy(() => import("@/pages/Models"));
 const ModelVersion = lazy(() => import("@/pages/ModelVersion"));
 const Dataset = lazy(() => import("@/pages/Dataset"));
-const Benchmark = lazy(() => import("@/pages/Benchmark"));
 const Impact = lazy(() => import("@/pages/Impact"));
 const WhatIf = lazy(() => import("@/pages/WhatIf"));
 const Data = lazy(() => import("@/pages/Data"));
@@ -118,7 +117,6 @@ export function App() {
               <Route path="models" element={<Models />} />
               <Route path="models/:id" element={<ModelVersion />} />
               <Route path="dataset" element={<Dataset />} />
-              <Route path="benchmark" element={<Benchmark />} />
               <Route path="impact" element={<Impact />} />
               <Route path="whatif" element={<WhatIf />} />
               <Route path="data" element={<Data />} />
