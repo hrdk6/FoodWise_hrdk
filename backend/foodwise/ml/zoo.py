@@ -437,15 +437,15 @@ def make(name: str, spec: FeatureSpec | None = None) -> ZooModel:
 
 
 def candidates_for_tier(tier: int, has_footfall: bool) -> list[str]:
+    """A small field: two baselines plus one model per family that has earned its place.
+    Ridge, LightGBM, two-stage and Holt-Winters still exist (old versions load and can be
+    built by name) but are no longer trained every week: they overlapped with the models
+    below and pushed the run past its time budget."""
     names = ["seasonal_naive", "weighted_mean"]
     if tier >= 1:
-        names += ["ridge", "elastic_net"]
+        names.append("elastic_net")
     if tier >= 2:
         names += ["extra_trees", "hist_gbm"]
-        if HAS_LIGHTGBM:
-            names.append("lightgbm")
-        if has_footfall:
-            names += ["two_stage", "holt_winters"]
     return names
 
 

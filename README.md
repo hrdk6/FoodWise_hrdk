@@ -14,7 +14,7 @@ Each organisation has **one shared sign-in** for everyone who plans food. FoodWi
 |---|---|
 | **Two sign-ins** | One organisation account (managers, cooks, anyone who plans food) that can do everything inside its organisation; a separate admin sign-in for FoodWise engineers. Each sign-in page accepts only its own kind of account |
 | **Prep plan** | Per dish and meal: a full forecast distribution (11 quantiles), a cost-optimal quantity (newsvendor), plain-language reasons ("Rain forecast −6%, Exam week −9%, 1,040 RSVPs"), approve or override with a reason |
-| **Model zoo** | Seasonal naive, weighted mean, ridge, elastic net, extra trees, histogram gradient boosting, LightGBM, two-stage (footfall × dish share), Holt-Winters, and a non-negative ensemble, chosen per canteen by walk-forward backtest |
+| **Model zoo** | Two baselines (seasonal naive, weighted mean), elastic net, extra trees, histogram gradient boosting, and a non-negative ensemble of the three, chosen per canteen by walk-forward backtest |
 | **Honest uncertainty** | Conformal intervals from out-of-fold errors, grouped by meal and by unusual days; promotion gates on skill, calibration, bias and simulated cost |
 | **Champion / challenger** | New winners shadow the champion on days they have never seen; promotion only if they win live. Drift and shortage-rate monitoring, rollback |
 | **Censored demand** | Sold-out servings are imputed (not trusted as demand) so running out doesn't teach the model to cook less |

@@ -39,12 +39,26 @@ const GATE_LABEL: Record<string, string> = {
   enough_history: "Enough history",
 };
 
-export function Leaderboard({ entries }: { entries: Entry[] }) {
+const byWape = (a: Entry, b: Entry) => (a.metrics.wape ?? Infinity) - (b.metrics.wape ?? Infinity);
+
+/** The winner (or, if nothing was selected, the most accurate learned model) and the best
+ * baseline it had to beat. Everything else lives in the full report. */
+function headline(entries: Entry[]): Entry[] {
   const scored = entries.filter((e) => e.metrics.wape != null);
+  const learned = scored.filter((e) => e.family !== "baseline").sort(byWape);
+  const baseline = scored.filter((e) => e.family === "baseline").sort(byWape)[0];
+  const pick = entries.find((e) => e.status === "selected") ?? learned[0];
+  return [pick, baseline].filter((e): e is Entry => e != null);
+}
+
+export function Leaderboard({ entries, moreHref }: { entries: Entry[]; moreHref?: string }) {
+  const shown = moreHref ? headline(entries) : entries;
+  const hidden = entries.length - shown.length;
+  const scored = shown.filter((e) => e.metrics.wape != null);
   const max = Math.max(...scored.map((e) => e.metrics.wape ?? 0), 0.01);
   return (
     <ul className="rim divide-y divide-rim">
-      {entries.map((e) => {
+      {shown.map((e) => {
         const failed = e.gates.filter((g) => !g.passed);
         const selected = e.status === "selected";
         return (
@@ -83,6 +97,14 @@ export function Leaderboard({ entries }: { entries: Entry[] }) {
           </li>
         );
       })}
+      {moreHref && hidden > 0 ? (
+        <li className="px-5 py-3 text-sm text-muted">
+          {hidden} other {hidden === 1 ? "model was" : "models were"} tested and did not win.{" "}
+          <Link to={moreHref} className="text-ink-2 underline decoration-rim-strong underline-offset-4 hover:text-ink">
+            See all in the full report
+          </Link>
+        </li>
+      ) : null}
     </ul>
   );
 }
@@ -225,7 +247,7 @@ export default function Models() {
                 </Link>
               }
             >
-              <Leaderboard entries={detail.data.leaderboard as Entry[]} />
+              <Leaderboard entries={detail.data.leaderboard as Entry[]} moreHref={`/models/${detail.data.id}`} />
             </Section>
           ) : null}
 
