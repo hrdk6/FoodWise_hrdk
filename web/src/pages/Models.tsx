@@ -41,14 +41,18 @@ const GATE_LABEL: Record<string, string> = {
 
 const byWape = (a: Entry, b: Entry) => (a.metrics.wape ?? Infinity) - (b.metrics.wape ?? Infinity);
 
-/** The winner (or, if nothing was selected, the most accurate learned model) and the best
- * baseline it had to beat. Everything else lives in the full report. */
+/** Models kept on the summary as a fixed point of comparison, whether or not they win. */
+const ALWAYS_SHOWN = ["ridge"];
+
+/** The winner (or, if nothing was selected, the most accurate learned model), the fixed
+ * comparison models, and the best baseline. Everything else lives in the full report. */
 function headline(entries: Entry[]): Entry[] {
   const scored = entries.filter((e) => e.metrics.wape != null);
   const learned = scored.filter((e) => e.family !== "baseline").sort(byWape);
   const baseline = scored.filter((e) => e.family === "baseline").sort(byWape)[0];
   const pick = entries.find((e) => e.status === "selected") ?? learned[0];
-  return [pick, baseline].filter((e): e is Entry => e != null);
+  const fixed = entries.filter((e) => ALWAYS_SHOWN.includes(e.algorithm) && e !== pick);
+  return [pick, ...fixed, baseline].filter((e): e is Entry => e != null);
 }
 
 export function Leaderboard({ entries, moreHref }: { entries: Entry[]; moreHref?: string }) {
